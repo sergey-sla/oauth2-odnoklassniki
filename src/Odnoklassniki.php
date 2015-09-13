@@ -16,13 +16,15 @@ class Odnoklassniki extends AbstractProvider
      */
     const BASE_VK_URL = 'https://oauth.vk.com';
 
-    const ACCESS_TOKEN_RESOURCE_OWNER_ID = 'user_id';
+    const ACCESS_TOKEN_RESOURCE_OWNER_ID = 'uid';
 
     const API_VERSION = '5.37';
 
     public $scopes = ['email'];
     public $uidKey = 'uid';
     public $responseType = 'json';
+
+    protected $applicationKey;
 
     public function getAccessToken($grant = 'authorization_code', $params = [])
     {
@@ -51,7 +53,7 @@ class Odnoklassniki extends AbstractProvider
      */
     public function getBaseAccessTokenUrl(array $params)
     {
-        return 'https://api.odnoklassniki.ru/oauth/token.do';
+        return 'http://api.odnoklassniki.ru/oauth/token.do';
     }
 
     /**
@@ -62,10 +64,13 @@ class Odnoklassniki extends AbstractProvider
      */
     public function getResourceOwnerDetailsUrl(AccessToken $token)
     {
-        return 'http://api.odnoklassniki.ru/fb.do?method=users.getCurrentUser&access_token='.$token;
-
-//        return "https://api.vk.com/method/users.get?user_id={$token->getResourceOwnerId()}&fields="
-//        .implode(",", $fields)."&access_token={$token}&v=".static::API_VERSION;
+        $url = 'http://api.odnoklassniki.ru/fb.do?method=users.getCurrentUser&access_token='.$token;
+        $url .= '&application_key='.$this->applicationKey;
+        $url .= '&sig=' . md5(
+                'application_key=' . $this->applicationKey . 'method=users.getCurrentUser'.
+                md5($token . $this->clientSecret)
+            );
+        return $url;
     }
 
     /**
@@ -129,19 +134,10 @@ class Odnoklassniki extends AbstractProvider
     protected function fetchResourceOwnerDetails(AccessToken $token)
     {
         $url = $this->getResourceOwnerDetailsUrl($token);
-
         $request = $this->getAuthenticatedRequest(self::METHOD_GET, $url, $token);
 
         $baseResponse = $this->getResponse($request);
-        return $baseResponse['response'][0];
+        return $baseResponse;
     }
 
-    private function urlUserDetails(AccessToken $token)
-    {
-        $param = 'application_key='.$this->clientPublic
-            .'&fields=uid,name,first_name,last_name,location,pic_3,gender,locale'
-            .'&method=users.getCurrentUser';
-        $sign = md5(str_replace('&', '', $param).md5($token.$this->clientSecret));
-        return 'http://api.odnoklassniki.ru/fb.do?'.$param.'&access_token='.$token.'&sig='.$sign;
-    }
 }
