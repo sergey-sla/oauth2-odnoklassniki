@@ -14,7 +14,6 @@ class Odnoklassniki extends AbstractProvider
      *
      * @const string
      */
-    const BASE_VK_URL = 'https://oauth.vk.com';
 
     const ACCESS_TOKEN_RESOURCE_OWNER_ID = 'uid';
 
@@ -24,7 +23,7 @@ class Odnoklassniki extends AbstractProvider
     public $uidKey = 'uid';
     public $responseType = 'json';
 
-    protected $applicationKey;
+    protected $clientPublic;
 
     public function getAccessToken($grant, array $params = [])
     {
@@ -65,9 +64,9 @@ class Odnoklassniki extends AbstractProvider
     public function getResourceOwnerDetailsUrl(AccessToken $token)
     {
         $url = 'http://api.odnoklassniki.ru/fb.do?method=users.getCurrentUser&access_token='.$token;
-        $url .= '&application_key='.$this->applicationKey;
+        $url .= '&application_key='.$this->clientPublic;
         $url .= '&sig=' . md5(
-                'application_key=' . $this->applicationKey . 'method=users.getCurrentUser'.
+                'application_key=' . $this->clientPublic . 'method=users.getCurrentUser'.
                 md5($token . $this->clientSecret)
             );
         return $url;
