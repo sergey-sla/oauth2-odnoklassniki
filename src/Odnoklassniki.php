@@ -15,10 +15,9 @@ class Odnoklassniki extends AbstractProvider
      * @const string
      */
 
-    public $scopes = ['email'];
-    public $uidKey = 'uid';
-    public $responseType = 'json';
-
+    const ACCESS_TOKEN_RESOURCE_OWNER_ID = 'uid';
+	
+	protected $scopes = ['VALUABLE_ACCESS'];
     protected $clientPublic;
 
     public function getAccessToken($grant, array $params = [])
@@ -78,7 +77,7 @@ class Odnoklassniki extends AbstractProvider
      */
     protected function getDefaultScopes()
     {
-        return [ 'email', 'wall' ];
+        return $this->scopes;
     }
 
     /**
