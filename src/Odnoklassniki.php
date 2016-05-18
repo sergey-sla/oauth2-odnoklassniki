@@ -17,8 +17,13 @@ class Odnoklassniki extends AbstractProvider
 
     const ACCESS_TOKEN_RESOURCE_OWNER_ID = 'uid';
 	
-	protected $scopes = ['VALUABLE_ACCESS'];
+	protected $scopes = ['VALUABLE_ACCESS', 'GET_EMAIL'];
     protected $clientPublic;
+
+    public function getScopeSeparator()
+    {
+        return ';';
+    }
 
     public function getAccessToken($grant, array $params = [])
     {
