@@ -9,7 +9,7 @@ This package provides [Odnoklassniki](http://ok.ru) integration for [OAuth2 Clie
 ## Installation
 
 ```sh
-composer require aego/oauth2-odnoklassniki
+composer require sergey-sla/oauth2-odnoklassniki
 ```
 
 ## Usage
