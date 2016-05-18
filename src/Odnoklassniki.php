@@ -26,7 +26,7 @@ class Odnoklassniki extends AbstractProvider
 
     protected $applicationKey;
 
-    public function getAccessToken($grant = 'authorization_code', $params = [])
+    public function getAccessToken($grant, array $params = [])
     {
         return parent::getAccessToken($grant, $params);
     }
