@@ -15,10 +15,6 @@ class Odnoklassniki extends AbstractProvider
      * @const string
      */
 
-    const ACCESS_TOKEN_RESOURCE_OWNER_ID = 'uid';
-
-    const API_VERSION = '5.37';
-
     public $scopes = ['email'];
     public $uidKey = 'uid';
     public $responseType = 'json';
